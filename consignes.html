@@ -1,0 +1,135 @@
+<h1>Visualization des traces des particules jusqu'au calorimetre dans phoenix</h1>
+
+<h2>Etape 0 : Basics</h2>
+
+<h3>LHCb</h3>
+<ul>
+<li>comprendre le fonctionnement du detecteur -> visite du Pt8</li>
+<li>comprendre les bases de la reconstruction</li>
+</ul>
+
+<h3>Linux</h3>
+<ul>
+<li>boot sur clef USB</li>
+<li>bases : menus, shell, systeme de fichiers</li>
+</ul>
+
+<h2>Etape 1 : Phoenix &amp; json data</h2>
+
+<ul>
+<li>visualisation des donnees LHCb
+<a href="https://hepsoftwarefoundation.org/phoenix/">https://hepsoftwarefoundation.org/phoenix/</a></li>
+<li>fichier de donnees evenement
+ouvrir LHCbEventDataV2Small.json, essayer de comprendre la structure</li>
+<li>syntaxe json
+<a href="https://stph.scenari-community.org/bdd/nos1/co/json02.html">https://stph.scenari-community.org/bdd/nos1/co/json02.html</a></li>
+<li>syntaxe phoenix
+<a href="https://github.com/HSF/phoenix/blob/master/guides/users.md#using-phoenix-with-your-own-data">https://github.com/HSF/phoenix/blob/master/guides/users.md#using-phoenix-with-your-own-data</a></li>
+<li>modification manuelle de donnees pour voir l'effet
+Ajouter un point a une des traces, verifier que la visualisation fonctionne</li>
+</ul>
+
+<h2>Etape 2 : utilisation de python pour explorer les fichiers json</h2>
+
+<ul>
+<li>installation du logiciel thonny, un environnement de developpement python pour debutants
+<ul>
+<li>sudo apt-get install thonny</li>
+</ul></li>
+<li>bases du langage python : syntaxe, boucles, fonctions
+<ul>
+<li><a href="https://www.youtube.com/watch?v=VmOPhT4HFNE">https://www.youtube.com/watch?v=VmOPhT4HFNE</a></li>
+<li>utiliser thonny</li>
+</ul></li>
+<li>lire un fichier json en python, en extraire des donnees et les afficher
+exercice extrapolateExercise.py</li>
+</ul>
+
+<h2>Etape 3 : un peu de math</h2>
+
+<ul>
+<li>extrapolation lineaire a partir de 2 points en z = 20000
+<ul>
+<li>on calcule les pentes en x et y par rapport a z</li>
+<li>on extrapole dx et dy pour le nouveau point, en se basant sur la pente et le nouveau dz</li>
+<li>on calcule le nouveau point</li>
+</ul></li>
+<li>a faire manuellement dans un premier temps (sur papier)
+<ul>
+<li>et essayer d'ajouter un point extrapole a l'une des trace pour verifier les calcul</li>
+</ul></li>
+</ul>
+
+<h2>Etape 4 : extrapolation en python</h2>
+
+<ul>
+<li>refaire l'exercice consistant a extrapoler une trace en python
+<ul>
+<li>exercise extrapolateExercise.py</li>
+<li>verifier qu'on retrouve ce qu'on avait trouve a la main</li>
+</ul></li>
+</ul>
+
+<h2>Etape 5 : mise en commun</h2>
+
+<ul>
+<li>exercice extendToCalo.py
+<ul>
+<li>boucler sur les evenement du fichier json</li>
+<li>boucler sur les traces de chaque evenement</li>
+<li>extraire les 2 derniers points</li>
+<li>extrapoler grace a la fonction ecrite a l'etape 4</li>
+<li>ajouter le nouveau point a la fin de la trace</li>
+<li>sauvegarder</li>
+</ul></li>
+<li>verifier le resultat dans Phoenix</li>
+</ul>
+
+
+
+<h1>Mandelbrot set, comparison python/C++</h1>
+
+<h2>Etape 0 : Definition of Mandelbrot set</h2>
+
+<h3>Nombres complexes</h3>
+<ul>
+<li>Un nombre sous la forme "z = a + i b" ou a et b sont des nombres reels</li>
+<li>L'addition est definie par z1+z2 = a1+a2 + i (b1+b2)</li>
+<li>La multiplication est definie par z1 * z2 = a1*a2 - b1*b2 + i (a1*b2+a2*b1)</li>
+<li>Cela revient a dire que i*i = -1, d'ou le nom de partie "imaginaire"</li>
+</ul>
+
+<h3>Suite Zn et divergence</h3>
+<ul>
+<li>On considere on nombre complexe quelconque c</li>
+<li>On pose Z0 = 0 puis pour tout n : Zn+1 = Zn^2 + c</li>
+<li>On dit que lq "suite" Zn diverge si quand n augmente, Zn finit par devenir extremement grand. Pour l'ensemble de mandelbrot on va considerer qu'on diverge si An^2+Bn^2 > 4 quand on ecrit Zn sous la forme Zn = An + iBn
+</ul>
+
+<h3>Ensemble de Mandelbrot et representation</h3>
+<ul>
+<li>On designe les points du plan par le nombre complexe correspondant a leurs coordonnees. Par exemple, c = x + iy est le complexe associe au point de coordonnees x,y</li>
+<li>Pour chaque point de coordonnee c, on definit la suite Zn et on teste sa divergence</li>
+<li>L'ensemble de mandelbrot est l'ensemble des points pour lesquels Zn ne diverge pas</li>
+<li>Pour les points ou la suite diverge, on utilise un code couleur pour montrer la "vitesse" de divergence
+</ul>
+
+<h2>Etape 1 : Calcul de l'ensemble de mandelbrot en python</h2>
+
+<h3>Calcul de la divergence de Zn</h3>
+<ul>
+<li>On va d'abord ecrire une fonction qui prend un complexe Cr + i Ci et test la divergence de la suite Zn.
+<li>La methode sera definie comme suit</li>
+<p>def mandel(cr, ci):</p>
+<li>Elle fera 100 iterations de Zn et retournera le premier n pour lequel on depasse 4, comme vu ci-dessus, ou -1 si on ne depasse pas 4 au bout de 100 iterations</li>
+<li>Le fichier mandelExercise.py donne les bases de cette fonction</li>
+</ul>
+
+<h3>Dessin de l'ensemble</h3>
+<ul>
+<li>la librairie matplotlib de python permet de creer une image a partir d'un tableau de chiffres a 2 dimensions, c'est a dire une liste de listes</li>
+<li>Cette liste comprend une liste par ligne qui elles-meme comprennent une valeur par point de la ligne.</li>
+<li>Ces valeurs sont calculees en utilisant la methode mandel definie precedemment</li>
+<li> Ecrire un programme prepare ce tableau pour une portion de plan entre minx/maxx = -2/0.5 et miny/maxy = -1.0/1.0</li>
+</ul>
+
