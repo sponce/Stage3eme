@@ -53,7 +53,7 @@ Etape 4 : extrapolation en python
 Etape 5 : mise en commun
 ------------------------
 
-*   exercice extendToCalo.py
+*   exercice extendToCaloExercise.py
     *   boucler sur les evenement du fichier json
     *   boucler sur les traces de chaque evenement
     *   extraire les 2 derniers points
